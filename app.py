@@ -68,4 +68,4 @@ def chat_endpoint(request: RequestState):
 # Run the application if executed as the main script
 if __name__ == '__main__':
     import uvicorn  # Import Uvicorn server for running the FastAPI app
-    uvicorn.run(app, host='127.0.0.1', port=8080)  # Start the app on localhost with port 8000
+    uvicorn.run(app, host='127.0.0.1', port=8080)  # Start the app on localhost with port 8080
