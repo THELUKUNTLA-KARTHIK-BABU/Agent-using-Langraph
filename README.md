@@ -1,108 +1,103 @@
-LangGraph AI Agent
+# LangGraph AI Agent
 
-This project is a LangGraph-based AI Agent using FastAPI for the backend and Streamlit for the frontend.
+## Overview
+LangGraph AI Agent is a conversational AI system that integrates FastAPI for backend processing and Streamlit for the frontend user interface. The agent is built using LangGraph, a framework that enables reasoning with Large Language Models (LLMs), and LangChain, a powerful library for chaining together different components in AI workflows. This project supports multiple models, including Llama 3 and Mixtral, and provides web search capabilities using the Tavily API.
 
-Features
+## Features
+- **FastAPI Backend**: Handles API requests, processes chat inputs, and interacts with the AI models.
+- **Streamlit Frontend**: Provides a user-friendly interface for users to input queries and receive AI-generated responses.
+- **Support for Multiple Models**: Users can select between different AI models, such as Llama 3 and Mixtral.
+- **Tavily Search Integration**: Enhances AI responses by retrieving relevant information from the web.
+- **Dockerized Deployment**: The entire system can be containerized and deployed easily using Docker.
 
-Uses LangGraph to create an AI agent with Groq LLMs.
+## Setup Instructions
 
-Integrates Tavily Search for web searches.
-
-Simple FastAPI backend to handle chat interactions.
-
-Streamlit UI for easy user interaction.
-
-Setup Instructions
-
-1. Clone the Repository
-
-git clone <repo-link>
+### 1. Clone the Repository
+To get started, clone the project repository from GitHub:
+```sh
+git clone <repo-url>
 cd <repo-folder>
+```
 
-2. Install Dependencies
-
+### 2. Install Dependencies
+Ensure you have Python 3.9 installed. Then, install the required Python libraries by running:
+```sh
 pip install -r requirements.txt
+```
 
-3. Set API Keys
+### 3. Run the Application
+To start both the FastAPI backend and the Streamlit frontend, use the following command:
+```sh
+uvicorn app:app --host 0.0.0.0 --port 8080 & streamlit run ui.py --server.port 8051 --server.address 0.0.0.0
+```
+This command will launch the API on port 8080 and the UI on port 8051.
 
-Update your environment variables:
+### 4. Using Docker
+To deploy the application using Docker, follow these steps:
+#### Build the Docker Image
+```sh
+docker build -t langgraph-agent .
+```
+#### Run the Docker Container
+```sh
+docker run -p 8080:8080 -p 8051:8051 langgraph-agent
+```
+This will start the application within a Docker container, making it accessible on your local machine.
 
-export GROQ_API_KEY='your_groq_api_key'
-export TAVILY_API_KEY='your_tavily_api_key'
+## API Endpoints
+- **POST /chat**: This endpoint processes user messages and returns AI-generated responses. It expects a JSON payload containing the following:
+  - `model_name`: The name of the model to be used (e.g., "llama3-70b-8192").
+  - `system_prompt`: A predefined instruction to guide the AI agent’s behavior.
+  - `messages`: A list of messages in the conversation history.
 
-4. Run the Backend (FastAPI)
-
-python app.py
-
-This will start the FastAPI server at http://127.0.0.1:8080
-
-5. Run the Frontend (Streamlit)
-
-streamlit run ui.py
-
-This will open the UI in your web browser.
-
-How It Works
-
-The FastAPI server processes chat requests and interacts with the Groq LLM.
-
-The LangGraph agent processes user inputs and fetches search results if needed.
-
-The Streamlit UI allows users to interact with the AI agent in a simple chat interface.
-
-API Endpoint
-
-POST /chat: Sends a request to the AI agent.
-
-Request Body:
-
+### Example Request
+```json
 {
   "model_name": "llama3-70b-8192",
-  "system_prompt": "Define the AI Agent",
-  "messages": ["User message here"]
+  "system_prompt": "You are a helpful AI assistant.",
+  "messages": ["Hello, how can you help me?"]
 }
+```
 
-Response:
-
+### Example Response
+```json
 {
   "messages": [
-    {"type": "ai", "content": "AI response here"}
+    {
+      "type": "ai",
+      "content": "Hello! How can I assist you today?"
+    }
   ]
 }
+```
 
-Available Models
+## Environment Variables
+To configure API keys for external services, set the following environment variables:
+- `TAVILY_API_KEY`: API key for Tavily search integration.
+- `GROQ_API_KEY`: API key for Groq AI models.
 
-llama3-70b-8192
+## Usage Guide
+1. Open your browser and navigate to `http://localhost:8051`.
+2. Enter a system prompt and type your query into the text box.
+3. Select the AI model you want to use from the dropdown menu.
+4. Click the submit button to send the query.
+5. View the AI-generated response displayed on the page.
 
-mixtral-8x7b-32768
+## Troubleshooting
+- **Issue: API not responding**
+  - Ensure that FastAPI is running on port 8080.
+  - Check if any errors are logged in the terminal.
+- **Issue: Streamlit UI not loading**
+  - Verify that Streamlit is running on port 8051.
+  - Refresh the browser and check the terminal output.
 
-### **What This Project Does**  
+## Contributing
+If you would like to contribute to this project, follow these steps:
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Commit your changes (`git commit -m "Added new feature"`).
+4. Push the branch (`git push origin feature-branch`).
+5. Open a Pull Request.
 
-This project is a **LangGraph AI Agent**, which is a chatbot that uses **FastAPI** for backend processing and **Streamlit** for the user interface. It allows users to interact with an AI model that can process queries, provide intelligent responses, and fetch web search results if needed.
 
-### **How It Works**  
-
-1. **User interacts with the AI agent**  
-   - Users can enter a message through the **Streamlit UI**.  
-   - They also define a **system prompt**, which helps guide the AI’s behavior.  
-   - Users can choose between **two AI models**: `llama3-70b-8192` or `mixtral-8x7b-32768`.
-
-2. **The request is sent to the FastAPI backend**  
-   - The request includes the selected **model**, **system prompt**, and **user message**.  
-   - FastAPI processes this request and passes it to **LangGraph**, which manages the AI agent's logic.
-
-3. **The AI agent generates a response**  
-   - The **ChatGroq LLM** processes the user’s query and provides an AI-generated response.  
-   - If needed, the agent can also fetch web search results using **Tavily Search**.
-
-4. **Response is displayed in the UI**  
-   - The processed response is returned to the **Streamlit UI**, where the user can view the AI’s answer.  
-
-### **Why This is Useful**  
-- **FastAPI** makes the backend lightweight and fast.  
-- **LangGraph** helps manage AI reasoning and external tool usage.  
-- **Streamlit** provides a simple web interface for interaction.  
-- **Supports multiple AI models** for different use cases.  
-- **Web search integration** improves AI-generated responses when needed.  
-
-This setup creates a **powerful, interactive AI agent** that can be used for chat-based AI tasks, research assistance, or general question-answering. 
+End
